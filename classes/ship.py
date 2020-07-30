@@ -20,7 +20,7 @@ class Ship():
 
     def shoot(self, KEYS, K_space, Screen, S_height):
         if KEYS[K_space]:
-            B = Bullet(self.x, self.y, Screen)
+            B = Bullet(self.x+self.width/2, self.y, Screen)
             self.bullets.append(B)
 
     def draw_hitbox(self, Screen):

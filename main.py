@@ -50,5 +50,4 @@ while main_loop:
         update_and_draw_ship()
 
 pygame.quit()
-
  
