@@ -10,9 +10,6 @@ class Bullet(object):
         self.img = pygame.transform.scale(self.img, (90,90))
         self.velocity -= self.acc
         self.y -= self.velocity 
-    def __del__(self):
-        """Destroy the object to don't waste memory""" 
-        pass
             
     def draw(self, Screen, s_height):
         """ Draw the bullet if is on screen""" 

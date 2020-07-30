@@ -15,7 +15,7 @@ class Ship():
         self.img = pygame.transform.scale(self.img, (100,100))
         self.width = self.img.get_width()
         self.height = self.img.get_height()
-        self.hitbox = (self.x+self.width//2, self.x-self.width//2, self.y+self.height//2, self.y-self.height//2)
+        self.hitbox = [self.x, self.y, self.width, self.height]
         self.bullets = []
 
     def shoot(self, KEYS, K_space, Screen, S_height):
@@ -23,16 +23,20 @@ class Ship():
             B = Bullet(self.x, self.y, Screen)
             self.bullets.append(B)
 
-    def draw(self, screen, S_width, S_height):
-        """Draw where the ship is located"""
+    def draw_hitbox(self, Screen):
+        """Draw ship's hitobx"""
+
+    def draw(self, Screen, S_width, S_height):
+        """Draw where the ship is located, and the bullets"""
         if self.hp > 0:
-            screen.blit(self.img, (self.x, self.y))
+            Screen.blit(self.img, (self.x, self.y))
+            pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
 
         for Bs in self.bullets: 
             Bs.update()
-            Bs.draw(screen, S_height)
+            Bs.draw(Screen, S_height)
 
-            #Pop if is not on Screen
+            #Remove if is not on Screen
             if Bs.y < 0: 
                self.bullets.remove(Bs) 
 
@@ -42,14 +46,18 @@ class Ship():
         """This funciton implement the movement of the character/ship"""
         if move_to[left] and self.x  > self.velocity:
             self.x -= self.velocity
+            self.hitbox[0] -= self.velocity
 
         if move_to[right] and self.x + self.width + self.velocity < Screen_width:
             self.x += self.velocity
+            self.hitbox[0] += self.velocity
 
         if move_to[up] and self.y > self.velocity:
             self.y -= self.velocity
+            self.hitbox[1] -= self.velocity
 
         if move_to[down] and self.y + self.height + self.velocity < Screen_height:
             self.y += self.velocity
+            self.hitbox[1] += self.velocity
         
             
