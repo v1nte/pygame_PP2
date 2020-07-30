@@ -18,7 +18,7 @@ class Ship():
         self.hitbox = (self.x+self.width//2, self.x-self.width//2, self.y+self.height//2, self.y-self.height//2)
         self.bullets = []
 
-    def shoot(self, KEYS, K_space, Screen, S_width, S_height):
+    def shoot(self, KEYS, K_space, Screen, S_height):
         if KEYS[K_space]:
             B = Bullet(self.x, self.y, Screen)
             self.bullets.append(B)
@@ -28,9 +28,13 @@ class Ship():
         if self.hp > 0:
             screen.blit(self.img, (self.x, self.y))
 
-        for Bs in self.bullets:
+        for Bs in self.bullets: 
             Bs.update()
-            Bs.draw(screen, S_width, S_height)
+            Bs.draw(screen, S_height)
+
+            #Pop if is not on Screen
+            if Bs.y < 0: 
+               self.bullets.remove(Bs) 
 
         #   self.hitbox = (self.x+self.width//2, self.x-self.width//2, self.y+self.height//2, self.y-self.height//2)
 
@@ -47,5 +51,5 @@ class Ship():
 
         if move_to[down] and self.y + self.height + self.velocity < Screen_height:
             self.y += self.velocity
-
+        
             

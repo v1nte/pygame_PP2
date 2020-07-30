@@ -34,15 +34,13 @@ def update_and_draw_ship():
     """update (x,y) and draw it"""
     SCREEN.blit(Background, (0,0))
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
-    m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_WIDTH, SCREEN_WIDTH)
+    m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
     m_ship.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
     pygame.display.update()
 
 main_loop = True
 while main_loop:
-
     m_ship = Ship("BLUE", "05", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
-#    imagen_fondo = pygame.image.load('img/bg.jpg')
     
     is_playing = True 
     while is_playing:
