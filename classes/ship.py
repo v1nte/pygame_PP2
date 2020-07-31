@@ -12,9 +12,9 @@ class Ship():
         self.ship_type = ship_type
         self.img_path = "src/img/Spaceships/"+ship_type+"/Spaceship_"+ship_type+"_"+color+".png"
         self.img = (pygame.image.load(self.img_path))
-        self.img = pygame.transform.scale(self.img, (100,100))
-        self.width = self.img.get_width()
-        self.height = self.img.get_height()
+        self.width = self.img.get_width()/4.5
+        self.height = self.img.get_height()/4.5
+        self.img = pygame.transform.scale(self.img, (int(self.width),int(self.height))) 
         self.hitbox = [self.x, self.y, self.width, self.height]
         self.bullets = []
 
@@ -23,13 +23,11 @@ class Ship():
             B = Bullet(self.x+self.width/2, self.y, Screen)
             self.bullets.append(B)
 
-    def draw_hitbox(self, Screen):
-        """Draw ship's hitobx"""
-
     def draw(self, Screen, S_width, S_height):
         """Draw where the ship is located, and the bullets"""
         if self.hp > 0:
             Screen.blit(self.img, (self.x, self.y))
+            #Just while coding
             pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
 
         for Bs in self.bullets: 

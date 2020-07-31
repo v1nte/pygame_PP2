@@ -40,7 +40,7 @@ def update_and_draw_ship():
 
 main_loop = True
 while main_loop:
-    m_ship = Ship("PURPLE", "04", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
+    m_ship = Ship("BLUE", "01", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
     
     is_playing = True 
     while is_playing:
