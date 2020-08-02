@@ -1,7 +1,10 @@
 import pygame
 from classes.ship import Ship 
+from classes.enemy import Enemy
 
 pygame.init()
+
+FPS = 60
 
 #Screen Settings
 SCREEN_WIDTH = 700
@@ -36,16 +39,32 @@ def update_and_draw_ship():
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
     m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
     m_ship.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
+    rect.update()
+    rect.draw(SCREEN)
     pygame.display.update()
 
+
+
+
+
+"""
+
+MAIN LOOP - GAME LOOP
+
+"""
 main_loop = True
 while main_loop:
-    m_ship = Ship("BLUE", "01", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
-    
+    m_ship = Ship("PURPLE", "4", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
+    rect = Enemy(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT) 
+
+
+    """
+    Loop while is Playing
+    """
     is_playing = True 
     while is_playing:
         event_quit()
-        clock.tick(60)
+        clock.tick(FPS)
 
         update_and_draw_ship()
 

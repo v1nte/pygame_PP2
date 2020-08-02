@@ -4,7 +4,7 @@ class Bullet(object):
     def __init__(self, x, y, Screen):
         self.x = x
         self.y = y
-        self.velocity = -25
+        self.velocity = -20
         self.acc = -0.5
         self.img = pygame.image.load('src/img/Flame_01.png')
         self.img = pygame.transform.scale(self.img, (10,10))

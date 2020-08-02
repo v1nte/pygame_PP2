@@ -10,7 +10,7 @@ class Ship():
         self.hp = 3
         self.color = color
         self.ship_type = ship_type
-        self.img_path = "src/img/Spaceships/"+ship_type+"/Spaceship_"+ship_type+"_"+color+".png"
+        self.img_path = "src/img/spaceships/"+ship_type+"/Spaceship_0"+ship_type+"_"+color+".png"
         self.img = (pygame.image.load(self.img_path))
         self.width = self.img.get_width()/4.5
         self.height = self.img.get_height()/4.5
@@ -19,12 +19,16 @@ class Ship():
         self.bullets = []
 
     def shoot(self, KEYS, K_space, Screen, S_height):
+        """Create the bullets and append it"""
+    
         if KEYS[K_space]:
             B = Bullet(self.x+self.width/2, self.y, Screen)
             self.bullets.append(B)
 
+
     def draw(self, Screen, S_width, S_height):
         """Draw where the ship is located, and the bullets"""
+
         if self.hp > 0:
             Screen.blit(self.img, (self.x, self.y))
             #Just while coding
@@ -38,7 +42,6 @@ class Ship():
             if Bs.y < 0: 
                self.bullets.remove(Bs) 
 
-        #   self.hitbox = (self.x+self.width//2, self.x-self.width//2, self.y+self.height//2, self.y-self.height//2)
 
     def update(self, move_to, left, right, up, down, Screen_width, Screen_height):
         """This funciton implement the movement of the character/ship"""
