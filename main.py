@@ -33,19 +33,20 @@ def event_quit():
         if event.type == pygame.QUIT:
             quit()
 
-def update_and_draw_ship():
-    """update (x,y) and draw it"""
-    SCREEN.blit(Background, (0,0))
+def main_update():
+    """Update all the things, lmao"""
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
     m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
-    m_ship.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.update()
+    rect.get_hit(m_ship.get_bullets())
+
+def main_draw():
+    """Draw all the things, lmao"""
+
+    SCREEN.blit(Background, (0,0))
+    m_ship.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.draw(SCREEN)
     pygame.display.update()
-
-
-
-
 
 """
 
@@ -66,7 +67,8 @@ while main_loop:
         event_quit()
         clock.tick(FPS)
 
-        update_and_draw_ship()
+        main_update()
+        main_draw()
 
 pygame.quit()
  

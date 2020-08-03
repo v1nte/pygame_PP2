@@ -61,4 +61,6 @@ class Ship():
             self.y += self.velocity
             self.hitbox[1] += self.velocity
         
-            
+    def get_bullets(self):
+        """Get Bullets, duh"""
+        return self.bullets
