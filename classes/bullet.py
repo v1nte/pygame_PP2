@@ -5,7 +5,7 @@ class Bullet(object):
         self.x = x
         self.y = y
         self.velocity = -20
-        self.acc = -0.5
+        self.acc = -0 
         self.img = pygame.image.load('src/img/Flame_01.png')
         self.img = pygame.transform.scale(self.img, (10,10))
         self.width = self.img.get_width()

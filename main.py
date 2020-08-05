@@ -37,7 +37,8 @@ def main_update():
     """Update all the things, lmao"""
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
     m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
-    rect.update(SCREEN_WIDTH, SCREEN_WIDTH)
+    m_ship.get_hit(rect,SCREEN_WIDTH,SCREEN_HEIGHT)
+    rect.update(SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.get_hit(m_ship.get_bullets())
 
 def main_draw():
@@ -49,13 +50,12 @@ def main_draw():
     pygame.display.update()
 
 """
-
 MAIN LOOP - GAME LOOP
 
 """
 main_loop = True
 while main_loop:
-    m_ship = Ship("PURPLE", "4", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
+    m_ship = Ship("PURPLE", "5", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
     rect = Enemy(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT) 
 
 
@@ -69,6 +69,8 @@ while main_loop:
 
         main_update()
         main_draw()
+        if m_ship.hp < 1:
+            is_playing = False
 
 pygame.quit()
  
