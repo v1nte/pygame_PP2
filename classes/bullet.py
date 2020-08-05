@@ -16,7 +16,8 @@ class Bullet(object):
         """ Draw the bullet if is on screen""" 
         if self.y in range(-200,s_height): 
             Screen.blit(self.img, (self.x, self.y))
-            pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
+            #HITBOX
+            #pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
 
     def update(self):
         """Bullets always go up""" 
