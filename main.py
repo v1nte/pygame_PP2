@@ -37,7 +37,7 @@ def main_update():
     """Update all the things, lmao"""
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
     m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
-    rect.update()
+    rect.update(SCREEN_WIDTH, SCREEN_WIDTH)
     rect.get_hit(m_ship.get_bullets())
 
 def main_draw():
