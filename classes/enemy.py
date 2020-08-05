@@ -28,7 +28,7 @@ class Enemy(object):
         """Just Draw where the "enemy" is """
         pygame.draw.rect(Screen, self.color,  self.img)
         #hitbox    
-        pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
+        #pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
 
     def update(self, S_width, S_height):
         """Update logic things"""
@@ -42,7 +42,7 @@ class Enemy(object):
 
         if self.hp < 1 or self.y+self.height > S_height:
             self.relocate(S_width, S_height)
-
+        
 
     def get_hitbox(self):
         '''Return Hitbox'''

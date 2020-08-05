@@ -21,6 +21,9 @@ class Ship():
     def get_bullets(self):
         """Get Bullets"""
         return self.bullets
+    def get_hp(self):
+        '''return HP'''
+        return self.hp
 
     def shoot(self, KEYS, K_space, Screen, S_height):
         """Create the bullets and append it"""
@@ -35,8 +38,8 @@ class Ship():
 
         if self.hp > 0:
             Screen.blit(self.img, (self.x, self.y))
-            #Just while coding
-            pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
+            #Just while coding - HITBOX
+            #pygame.draw.rect(Screen, (255,0,0),  self.hitbox, 2)
 
         for Bs in self.bullets: 
             Bs.update()

@@ -5,6 +5,7 @@ from classes.enemy import Enemy
 pygame.init()
 
 FPS = 60
+text = pygame.font.SysFont('console', 30, True)
 
 #Screen Settings
 SCREEN_WIDTH = 700
@@ -34,17 +35,32 @@ def event_quit():
             quit()
 
 def main_update():
-    """Update all the things, lmao"""
+    """Update logical things"""
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
     m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
     m_ship.get_hit(rect,SCREEN_WIDTH,SCREEN_HEIGHT)
     rect.update(SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.get_hit(m_ship.get_bullets())
+    if m_ship.hp < 1:
+        final_msg = text.render("Perdiste! tonto", 1, (255, 153, 153)) 
+    if rect.lost_count > 9:
+        final_msg = text.render("GANASTE!!!", 1, (255,153,153)) 
+
+    if m_ship.hp < 1 or rect.lost_count > 9:
+        SCREEN.blit(final_msg, (SCREEN_WIDTH//2-final_msg.get_width()//2, SCREEN_HEIGHT//2-final_msg.get_height()//2))
+        pygame.display.update()
+        pygame.time.delay(2000)
+        rect.lost_count = 0
 
 def main_draw():
-    """Draw all the things, lmao"""
-
+    """Draw all the things """
+    HP = text.render("Vidas:"+str(m_ship.hp),1, (255, 153, 153))
+    HP_enemy = text.render("Vidas enemigo:"+str(rect.hp),1, (255, 153, 153))
+    Score = text.render("Score:"+str(rect.lost_count), 30, (255,153,153))
     SCREEN.blit(Background, (0,0))
+    SCREEN.blit(Score, (SCREEN_WIDTH-Score.get_width(),0))
+    SCREEN.blit(HP, (0,0))
+    SCREEN.blit(HP_enemy, (0,30))
     m_ship.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.draw(SCREEN)
     pygame.display.update()
@@ -74,3 +90,4 @@ while main_loop:
 
 pygame.quit()
  
+
