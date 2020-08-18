@@ -1,5 +1,6 @@
 import pygame
 from classes.bullet import Bullet
+from pygame import mixer
 
 class Ship():
     def __init__(self, color, ship_type, Screen, Screen_width, Screen_height, x=300, y=800):
@@ -113,6 +114,7 @@ class Ship():
     
     def get_hit(self, enemy, S_width, S_height):
         '''HP -= 1 if get hit by enemy'''
+        destroy_fx = mixer.Sound("src/sounds/destroy_fx.wav")
         w_comparation1 = enemy.hitbox[0] >= self.x and enemy.hitbox[0] <= self.x + self.height 
         h_comparation1 = enemy.hitbox[1] >= self.y and enemy.hitbox[1] <= self.y + self.height   
         comp1 = w_comparation1 and h_comparation1
@@ -123,8 +125,9 @@ class Ship():
 
         if comp1 or comp2:
             enemy.relocate(S_width, S_height)
+            destroy_fx.play()
             self.hp -= 1
-            print("Ship HP: ",self.hp)
+            #print("Ship HP: ",self.hp)
         if enemy.y + enemy.height + 5 > S_height:
             self.hp -= 1
-            print("Ship HP: ",self.hp)
+            #print("Ship HP: ",self.hp)

@@ -38,7 +38,7 @@ class Enemy(object):
 
         if self.hp < 1:
             self.lost_count += 1
-            print("Lost count: ",self.lost_count)
+            #print("Lost count: ",self.lost_count)
 
         if self.hp < 1 or self.y+self.height > S_height:
             self.relocate(S_width, S_height)
@@ -48,6 +48,9 @@ class Enemy(object):
         '''Return Hitbox'''
         return self.hitbox
 
+    def get_score(self):
+        return (50 - self.hp) 
+
     def get_hit(self, other_hitbox):
         """HP -= 1 if get hit by bullet, and destroy that bullet"""
         for i in other_hitbox:
@@ -56,4 +59,4 @@ class Enemy(object):
             if width_comparation and height_comparation:
                 other_hitbox.remove(i) 
                 self.hp -= 1
-                print(self.hp)
+#                print(self.hp)

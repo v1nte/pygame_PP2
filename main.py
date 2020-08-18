@@ -1,4 +1,5 @@
 import pygame
+import json
 from pygame.locals import *
 from classes.ship import Ship 
 from classes.enemy import Enemy
@@ -8,12 +9,15 @@ pygame.init()
 
 FPS = 60
 text = pygame.font.SysFont('console', 30, True)
+json_file = open("scores.json", "r+", encoding="utf-8")
+j_score = json.load(json_file)
+
 
 #Screen Settings
 SCREEN_WIDTH = 700
 SCREEN_HEIGHT = 900 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Working on it...")
+pygame.display.set_caption("Py Ship Ulegos")
 Background = pygame.image.load('src/img/bg.png')
 Background = pygame.transform.scale(Background, (SCREEN_WIDTH,SCREEN_HEIGHT))
 
@@ -41,11 +45,13 @@ def event_quit():
 
 def main_update():
     """Update logical things"""
+    global SCORE
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
     m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
     m_ship.get_hit(rect,SCREEN_WIDTH,SCREEN_HEIGHT)
     rect.update(SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.get_hit(m_ship.get_bullets())
+    SCORE += rect.get_score()
     if m_ship.hp < 1:
         final_msg = text.render("Perdiste! tonto", 1, (255, 153, 153)) 
     if rect.lost_count > 9:
@@ -59,9 +65,10 @@ def main_update():
 
 def main_draw():
     """Draw all the things """
+    global SCORE
     HP = text.render("Vidas:"+str(m_ship.hp),1, (255, 153, 153))
     HP_enemy = text.render("Vidas enemigo:"+str(rect.hp),1, (255, 153, 153))
-    Score = text.render("Score:"+str(rect.lost_count), 30, (255,153,153))
+    Score = text.render("Score:"+str(SCORE), 30, (255,153,153))
     SCREEN.blit(Background, (0,0))
     SCREEN.blit(Score, (SCREEN_WIDTH-Score.get_width(),0))
     SCREEN.blit(HP, (0,0))
@@ -69,6 +76,39 @@ def main_draw():
     m_ship.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.draw(SCREEN)
     pygame.display.update()
+
+
+def score_screen():
+    '''Display the Score you have'''
+    click3 = False
+    seeing_score = True
+    while seeing_score:
+        mx, my = pygame.mouse.get_pos()
+        SCREEN.blit(Background, (0,0))
+        back_btn = pygame.Rect(250, 800, 200,50)
+        back_txt = text.render("Volver", 1, (255,25,255))
+        pygame.draw.rect(SCREEN, (200, 200, 200), back_btn)
+        SCREEN.blit(back_txt, (280,810))
+
+        if j_score["Score1"]:
+            for i in range(len(j_score)):
+                score_txt = text.render("Score " +str(i+1)+ ": "+ str(j_score['Score'+str(i+1)]), 1 , (255,25,255)) 
+                SCREEN.blit(score_txt, (150, 300+i*35))
+        else:
+            SCREEN.blit(text.render("No tienes puntaje aun", 1, (255,25,255)), (150, 300))
+
+
+        if back_btn.collidepoint((mx,my))  and click3:
+            seeing_score = False
+            click3 = False
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                quit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click3 = True
+        pygame.display.update()
 
 def select_ship():
     """Select type and color of the Ship"""
@@ -159,6 +199,7 @@ def select_ship():
 
         pygame.display.update()
 
+
 def main_menu():
     global click, menu_loop
     SCREEN.blit(Background, (0,0))
@@ -166,6 +207,7 @@ def main_menu():
 
     play_button = pygame.Rect(50, 100, 200, 50)
     select_ship_button = pygame.Rect(50, 200, 200, 50)
+    scores_button = pygame.Rect(50, 300, 200, 50)
     
     if play_button.collidepoint((mx,my)) and click:
         menu_loop = False
@@ -173,14 +215,20 @@ def main_menu():
     if select_ship_button.collidepoint((mx,my)) and click:
         select_ship()
         click = False
+    if scores_button.collidepoint((mx,my)) and click:
+        score_screen()
+        click = False
 
     pygame.draw.rect(SCREEN, (200, 200, 200), play_button)
     pygame.draw.rect(SCREEN, (200, 200, 200), select_ship_button)
+    pygame.draw.rect(SCREEN, (200, 200, 200), scores_button)
 
     select_ship_text = text.render("Elegir nave", 1, (255, 25,255))
     play_text = text.render("JUGAR!",1,(255,25,255))
+    scores_text = text.render("Puntajes",1,(255,25,255))
     SCREEN.blit(play_text, (50,100))
     SCREEN.blit(select_ship_text, (50,200))
+    SCREEN.blit(scores_text, (50,300))
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -198,6 +246,8 @@ main_loop = True
 while main_loop:
     m_ship = Ship("NAVY BLUE", "1", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
     rect = Enemy(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT) 
+    global SCORE
+    SCORE = 0
 
     #BACKGROUND Sound
     mixer.music.load('src/sounds/Mercury.mp3')
@@ -224,8 +274,16 @@ while main_loop:
         main_update()
         main_draw()
         if m_ship.hp < 1:
+            if j_score["Score1"] != None:
+                #j_score.udpate({"Score"+str(len(j_score)+1) : SCORE})
+                json.dump(j_score, json_file)
+            else:
+                j_score.update({"Score1" : SCORE})
+                #j_score["Score1"] = SCORE
+                json.dump(j_score, json_file)
             is_playing = False
 
+json_file.close()
 pygame.quit()
  
 
