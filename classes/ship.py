@@ -31,6 +31,12 @@ class Ship():
 
     def get_scale(self):
         return self.scale
+
+    def get_color(self):
+        return self.color
+
+    def get_type(self):
+        return self.ship_type
     
     def set_pos(self, x, y):
         '''set pos of ship'''
@@ -42,12 +48,14 @@ class Ship():
         self.img_path = "src/img/spaceships/"+s_type+"/Spaceship_0"+s_type+"_"+self.color+".png"
         self.img = (pygame.image.load(self.img_path))
         self.resize(scale)
+        self.ship_type = s_type
 
     def set_color(self, clr, scale):
         '''set the color of ship'''
         self.img_path = "src/img/spaceships/"+self.ship_type+"/Spaceship_0"+self.ship_type+"_"+clr+".png"
         self.img = (pygame.image.load(self.img_path))
         self.resize(scale)
+        self.color = clr
 
 
     def resize(self, n):

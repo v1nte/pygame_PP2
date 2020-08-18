@@ -74,9 +74,11 @@ def select_ship():
     global SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT
     global m_ship
 
+    back_text = text.render("Volver", 1, (255,25,255))
     test_ships = []
     preview_ship = m_ship
 
+    back_button = pygame.Rect(250, 800, 200,50)
     rect_blue = pygame.Rect(80, 500, 50,50)
     rect_green = pygame.Rect(80*2, 500, 50,50)
     rect_n_blue = pygame.Rect(80*3, 500, 50,50)
@@ -96,16 +98,17 @@ def select_ship():
         mx, my = pygame.mouse.get_pos()
         SCREEN.blit(Background, (0,0))
         preview_ship.draw(SCREEN, SCREEN_HEIGHT, SCREEN_HEIGHT)
+        pygame.draw.rect(SCREEN, (200, 200, 200), back_button)
+        SCREEN.blit(back_text, (280,810))
 
         i = 0
         for ships in test_ships:
             ships.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
             if ships.get_hb_as_rect().collidepoint((mx,my)) and click2:
-                m_ship.set_type(str(i+1),m_ship.get_scale())
+                m_ship.set_type(str(i+1), m_ship.get_scale())
                 preview_ship.set_type(str(i+1), preview_ship.get_scale()*2)
+                print(preview_ship.get_color())
             i += 1
-
-
 
 
         pygame.draw.rect(SCREEN, (0, 0, 255), rect_blue)
@@ -115,34 +118,34 @@ def select_ship():
         pygame.draw.rect(SCREEN, (255, 0, 255), rect_purple)
         pygame.draw.rect(SCREEN, (255, 0, 0), rect_red)
         pygame.draw.rect(SCREEN, (255, 255, 0), rect_yellow)
+        
 
         #TEDIOUS PART!!!!!!!!!!!!!!!!!!!!!!!!
+        if back_button.collidepoint((mx,my)) and click2:
+            m_ship.set_color(preview_ship.get_color(), m_ship.get_scale())
+            m_ship.set_type(preview_ship.get_type(), m_ship.get_scale())
+            selecting = False
+            click2 = False
+
         if rect_blue.collidepoint((mx,my)) and click2:
-            m_ship.set_color("BLUE" , m_ship.get_scale())
             preview_ship.set_color("BLUE", preview_ship.get_scale()*2) 
 
         if rect_green.collidepoint((mx,my)) and click2:
-            m_ship.set_color("GREEN" , m_ship.get_scale())
             preview_ship.set_color("GREEN", preview_ship.get_scale()*2) 
         
         if rect_n_blue.collidepoint((mx,my)) and click2:
-            m_ship.set_color("NAVY BLUE" , m_ship.get_scale())
             preview_ship.set_color("NAVY BLUE", preview_ship.get_scale()*2) 
 
         if rect_orange.collidepoint((mx,my)) and click2:
-            m_ship.set_color("ORANGE" , m_ship.get_scale())
             preview_ship.set_color("ORANGE", preview_ship.get_scale()*2) 
 
         if rect_purple.collidepoint((mx,my)) and click2:
-            m_ship.set_color("PURPLE" , m_ship.get_scale())
             preview_ship.set_color("PURPLE", preview_ship.get_scale()*2) 
 
         if rect_red.collidepoint((mx,my))  and click2:
-            m_ship.set_color("RED" , m_ship.get_scale())
             preview_ship.set_color("RED", preview_ship.get_scale()*2) 
         
         if rect_yellow.collidepoint((mx,my)) and click2:
-            m_ship.set_color("YELLOW" , m_ship.get_scale())
             preview_ship.set_color("YELLOW", preview_ship.get_scale()*2) 
 
         click2 = False
@@ -165,14 +168,18 @@ def main_menu():
     
     if play_button.collidepoint((mx,my)) and click:
         menu_loop = False
+        click = False
     if select_ship_button.collidepoint((mx,my)) and click:
         select_ship()
+        click = False
 
-    pygame.draw.rect(SCREEN, (255, 0, 0), play_button)
-    pygame.draw.rect(SCREEN, (255, 0, 0), select_ship_button)
+    pygame.draw.rect(SCREEN, (200, 200, 200), play_button)
+    pygame.draw.rect(SCREEN, (200, 200, 200), select_ship_button)
 
-    play_text = text.render("JUGAR!",1,(255,153,153))
+    select_ship_text = text.render("Elegir nave", 1, (255, 25,255))
+    play_text = text.render("JUGAR!",1,(255,25,255))
     SCREEN.blit(play_text, (50,100))
+    SCREEN.blit(select_ship_text, (50,200))
 
     for event in pygame.event.get():
         if event.type == QUIT:
