@@ -9,8 +9,6 @@ pygame.init()
 
 FPS = 60
 text = pygame.font.SysFont('console', 30, True)
-json_file = open("scores.json", "r+", encoding="utf-8")
-j_score = json.load(json_file)
 
 
 #Screen Settings
@@ -39,7 +37,7 @@ def KEYS():
 def event_quit():
     """Close the game if you pressed "X" in the corner """
     for event  in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             quit()
     pygame.display.update()
 
@@ -87,15 +85,18 @@ def score_screen():
         SCREEN.blit(Background, (0,0))
         back_btn = pygame.Rect(250, 800, 200,50)
         back_txt = text.render("Volver", 1, (255,25,255))
+        reset_txt_ = text.render("Reset", 1, (255,25,255))
         pygame.draw.rect(SCREEN, (200, 200, 200), back_btn)
         SCREEN.blit(back_txt, (280,810))
-
-        if j_score["Score1"]:
-            for i in range(len(j_score)):
-                score_txt = text.render("Score " +str(i+1)+ ": "+ str(j_score['Score'+str(i+1)]), 1 , (255,25,255)) 
-                SCREEN.blit(score_txt, (150, 300+i*35))
-        else:
-            SCREEN.blit(text.render("No tienes puntaje aun", 1, (255,25,255)), (150, 300))
+        
+        with open('scores.json', 'r') as f:
+            data = json.load(f)
+            if data["Score1"] != 0: 
+                for i in range(len(data)):
+                    score_txt = text.render("Score " +str(i+1)+ ": "+ str(data['Score'+str(i+1)]), 1 , (255,25,255)) 
+                    SCREEN.blit(score_txt, (150, 300+i*35))
+            else:
+                SCREEN.blit(text.render("No tienes puntaje aun", 1, (255,25,255)), (150, 300))
 
 
         if back_btn.collidepoint((mx,my))  and click3:
@@ -242,6 +243,7 @@ def main_menu():
 MAIN LOOP - GAME LOOP
 
 """
+
 main_loop = True
 while main_loop:
     m_ship = Ship("NAVY BLUE", "1", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
@@ -249,6 +251,8 @@ while main_loop:
     global SCORE
     SCORE = 0
 
+    #json_file = open("scores.json", "r+", encoding="utf-8")
+    #j_score = json.load(json_file)
     #BACKGROUND Sound
     mixer.music.load('src/sounds/Mercury.mp3')
     mixer.music.play(-1)
@@ -274,16 +278,18 @@ while main_loop:
         main_update()
         main_draw()
         if m_ship.hp < 1:
-            if j_score["Score1"] != None:
-                #j_score.udpate({"Score"+str(len(j_score)+1) : SCORE})
-                json.dump(j_score, json_file)
-            else:
-                j_score.update({"Score1" : SCORE})
-                #j_score["Score1"] = SCORE
-                json.dump(j_score, json_file)
+            with open('scores.json', 'r') as f:
+                data = json.load(f)
+            with open('scores.json', 'w') as f:
+
+                if data["Score1"] == 0:
+                    data.update({"Score1" : SCORE})
+                    print(data)
+                else:
+                    string = "Score"+str(len(data)+1)
+                    data.update({string: SCORE})
+                json.dump(data, f)
+                print(f)
             is_playing = False
 
-json_file.close()
 pygame.quit()
- 
-
