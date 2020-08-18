@@ -75,6 +75,18 @@ def main_draw():
     rect.draw(SCREEN)
     pygame.display.update()
 
+def reset_scores():
+    '''reset the json file'''
+    with open('scores.json', 'r') as f:
+        data = json.load(f)
+    with open('scores.json', 'w') as f:
+        for i in range(len(data)):
+            data.popitem()
+
+        data.update({"Score1" : 0})
+        json.dump(data, f)
+
+
 
 def score_screen():
     '''Display the Score you have'''
@@ -83,11 +95,15 @@ def score_screen():
     while seeing_score:
         mx, my = pygame.mouse.get_pos()
         SCREEN.blit(Background, (0,0))
-        back_btn = pygame.Rect(250, 800, 200,50)
+
+        back_btn = pygame.Rect(150, 800, 150,50)
         back_txt = text.render("Volver", 1, (255,25,255))
-        reset_txt_ = text.render("Reset", 1, (255,25,255))
+        reset_btn = pygame.Rect(350, 800, 150, 50)
+        reset_txt = text.render("Reset", 1, (255,25,255))
         pygame.draw.rect(SCREEN, (200, 200, 200), back_btn)
-        SCREEN.blit(back_txt, (280,810))
+        pygame.draw.rect(SCREEN, (200,200,200), reset_btn)
+        SCREEN.blit(back_txt, (180,810))
+        SCREEN.blit(reset_txt, (380,810))
         
         with open('scores.json', 'r') as f:
             data = json.load(f)
@@ -99,10 +115,13 @@ def score_screen():
                 SCREEN.blit(text.render("No tienes puntaje aun", 1, (255,25,255)), (150, 300))
 
 
-        if back_btn.collidepoint((mx,my))  and click3:
+        if back_btn.collidepoint((mx,my)) and click3:
             seeing_score = False
-            click3 = False
 
+        if reset_btn.collidepoint((mx,my)) and click3:
+            reset_scores()
+
+        click3 = False
         for event in pygame.event.get():
             if event.type == QUIT:
                 quit()
