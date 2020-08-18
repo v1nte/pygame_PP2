@@ -243,9 +243,9 @@ def main_menu():
     SCREEN.blit(Background, (0,0))
     mx, my = pygame.mouse.get_pos()
 
-    play_button = pygame.Rect(50, 100, 200, 50)
-    select_ship_button = pygame.Rect(50, 200, 200, 50)
-    scores_button = pygame.Rect(50, 300, 200, 50)
+    play_button = pygame.Rect(250, 100, 200, 50)
+    select_ship_button = pygame.Rect(250, 200, 200, 50)
+    scores_button = pygame.Rect(250, 300, 200, 50)
     
     if play_button.collidepoint((mx,my)) and click:
         menu_loop = False
@@ -265,9 +265,9 @@ def main_menu():
     select_ship_text = text.render("Elegir nave", 1, (255, 25,255))
     play_text = text.render("JUGAR!",1,(255,25,255))
     scores_text = text.render("Puntajes",1,(255,25,255))
-    SCREEN.blit(play_text, (50,100))
-    SCREEN.blit(select_ship_text, (50,200))
-    SCREEN.blit(scores_text, (50,300))
+    SCREEN.blit(play_text, (300,105))
+    SCREEN.blit(select_ship_text, (250,205))
+    SCREEN.blit(scores_text, (275,305))
 
     for event in pygame.event.get():
         if event.type == QUIT:
