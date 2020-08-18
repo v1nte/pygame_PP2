@@ -8,7 +8,7 @@ class Ship():
         self.y = y  
         self.velocity = 10
         self.acc = 0.1
-        self.hp = 3
+        self.hp = 5
         self.scale = 1/4.5
         self.color = color
         self.ship_type = ship_type

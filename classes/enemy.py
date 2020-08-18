@@ -16,6 +16,11 @@ class Enemy(object):
         self.img = pygame.Rect(self.x, self.y, self.width, self.height)
 
 
+    def set_vel(self,n):
+        '''set velocity'''
+        self.velocity = n
+
+
     def relocate(self, S_width, S_height):
         '''Relocate the box'''
         self.x = random.uniform(0, S_width-self.width) 

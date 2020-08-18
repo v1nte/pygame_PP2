@@ -44,26 +44,43 @@ def event_quit():
 def main_update():
     """Update logical things"""
     global SCORE
+    global diff, seeing_score, is_playing
     m_ship.update(KEYS(), K_LEFT, K_RIGHT, K_UP, K_DOWN, SCREEN_WIDTH, SCREEN_HEIGHT)
     m_ship.shoot(KEYS(), K_SPACE, SCREEN, SCREEN_HEIGHT)
     m_ship.get_hit(rect,SCREEN_WIDTH,SCREEN_HEIGHT)
     rect.update(SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.get_hit(m_ship.get_bullets())
     SCORE += rect.get_score()
+    win_msg = text.render("GANASTE!!!", 1, (255,153,153)) 
+    lost_msg = text.render("Perdiste! tonto", 1, (255, 153, 153)) 
+
     if m_ship.hp < 1:
-        final_msg = text.render("Perdiste! tonto", 1, (255, 153, 153)) 
+        final_msg = lost_msg
+
+    if rect.lost_count > 2:
+        diff = "UdC"
+        rect.set_vel(6)
+    
+    if rect.lost_count > 6:
+        diff = "PUEC"
+        rect.set_vel(8)
+
     if rect.lost_count > 9:
-        final_msg = text.render("GANASTE!!!", 1, (255,153,153)) 
+        final_msg = win_msg 
 
     if m_ship.hp < 1 or rect.lost_count > 9:
         SCREEN.blit(final_msg, (SCREEN_WIDTH//2-final_msg.get_width()//2, SCREEN_HEIGHT//2-final_msg.get_height()//2))
+        seeing_score = True
+        is_playing = False
         pygame.display.update()
         pygame.time.delay(2000)
-        rect.lost_count = 0
 
 def main_draw():
     """Draw all the things """
     global SCORE
+    global diff
+    global final_msg, win_msg, lost_msg
+    diff_txt = text.render("Dificultad: "+diff, 1, (255,153,153))
     HP = text.render("Vidas:"+str(m_ship.hp),1, (255, 153, 153))
     HP_enemy = text.render("Vidas enemigo:"+str(rect.hp),1, (255, 153, 153))
     Score = text.render("Score:"+str(SCORE), 30, (255,153,153))
@@ -71,6 +88,7 @@ def main_draw():
     SCREEN.blit(Score, (SCREEN_WIDTH-Score.get_width(),0))
     SCREEN.blit(HP, (0,0))
     SCREEN.blit(HP_enemy, (0,30))
+    SCREEN.blit(diff_txt, (0,60))
     m_ship.draw(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT)
     rect.draw(SCREEN)
     pygame.display.update()
@@ -108,7 +126,7 @@ def score_screen():
         with open('scores.json', 'r') as f:
             data = json.load(f)
             if data["Score1"] != 0: 
-                for i in range(len(data)):
+                for i in range(len(data)): 
                     score_txt = text.render("Score " +str(i+1)+ ": "+ str(data['Score'+str(i+1)]), 1 , (255,25,255)) 
                     SCREEN.blit(score_txt, (150, 300+i*35))
             else:
@@ -221,7 +239,7 @@ def select_ship():
 
 
 def main_menu():
-    global click, menu_loop
+    global click, menu_loop, seeing_score
     SCREEN.blit(Background, (0,0))
     mx, my = pygame.mouse.get_pos()
 
@@ -235,7 +253,8 @@ def main_menu():
     if select_ship_button.collidepoint((mx,my)) and click:
         select_ship()
         click = False
-    if scores_button.collidepoint((mx,my)) and click:
+    if (scores_button.collidepoint((mx,my)) and click) or seeing_score :
+        seeing_score = False
         score_screen()
         click = False
 
@@ -262,15 +281,16 @@ def main_menu():
 MAIN LOOP - GAME LOOP
 
 """
-
+diff = ""
 main_loop = True
+seeing_score = False
 while main_loop:
     m_ship = Ship("NAVY BLUE", "1", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
     rect = Enemy(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT) 
-    global SCORE
+    global SCORE 
     SCORE = 0
 
-    #json_file = open("scores.json", "r+", encoding="utf-8")
+    #json_file = pen("scores.json", "r+", encoding="utf-8")
     #j_score = json.load(json_file)
     #BACKGROUND Sound
     mixer.music.load('src/sounds/Mercury.mp3')
@@ -289,6 +309,8 @@ while main_loop:
     """
     Loop while is Playing
     """
+    m_ship.set_pos(300,800)
+    diff = "ULegos"
     is_playing = True 
     while is_playing:
         event_quit()
@@ -296,7 +318,7 @@ while main_loop:
 
         main_update()
         main_draw()
-        if m_ship.hp < 1:
+        if m_ship.hp < 1 or rect.lost_count > 9 :
             with open('scores.json', 'r') as f:
                 data = json.load(f)
             with open('scores.json', 'w') as f:
