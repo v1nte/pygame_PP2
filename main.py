@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from classes.ship import Ship 
 from classes.enemy import Enemy
+from  pygame import mixer
 
 pygame.init()
 
@@ -198,8 +199,12 @@ while main_loop:
     m_ship = Ship("NAVY BLUE", "1", SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT )
     rect = Enemy(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT) 
 
+    #BACKGROUND Sound
+    mixer.music.load('src/sounds/Mercury.mp3')
+    mixer.music.play(-1)
+
     """
-    MENU LOOP
+    MENUS LOOP
     """
     menu_loop = True
     while menu_loop:
